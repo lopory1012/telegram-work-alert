@@ -57,4 +57,18 @@ if message:
     print("알림 전송 완료:", message)
 
 else:
-    print("현재 시간에는 예정된 알림이 없습니다.")
+    message = "🔔 테스트 알림입니다.\n텔레그램 봇이 정상적으로 연결되었습니다."
+
+    url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
+
+    data = urllib.parse.urlencode({
+        "chat_id": CHAT_ID,
+        "text": message
+    }).encode()
+
+    request = urllib.request.Request(url, data=data)
+
+    with urllib.request.urlopen(request) as response:
+        print(response.read().decode())
+
+    print("테스트 알림 전송 완료")
