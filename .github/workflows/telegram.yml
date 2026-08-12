@@ -1,9 +1,9 @@
 name: Telegram Work Alert
 
 on:
-schedule:
-  - cron: '50 14 * * *'        # 매일 23:50 KST (일일보고)
-  - cron: '50 12 * * 0,1,4,5'  # 21:50 KST, 일/월/목/금 (사전취합 관련)
+  schedule:
+    - cron: '50 14 * * *'
+    - cron: '50 12 * * 0,1,4,5'
   workflow_dispatch:
 
 jobs:
