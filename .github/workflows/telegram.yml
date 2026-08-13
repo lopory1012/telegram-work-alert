@@ -2,9 +2,10 @@ name: Telegram Work Alert
 
 on:
   schedule:
-    - cron: '50 14 * * *'
-    - cron: '50 12 * * 0,1,4,5'
-  workflow_dispatch:
+  - cron: '50 14 * * *'
+  - cron: '50 12 * * 0,1,4,5'
+  - cron: '15 2 * * *'      # ← 임시 테스트용, 확인 후 삭제할 것
+workflow_dispatch:
 
 jobs:
   send-alert:
