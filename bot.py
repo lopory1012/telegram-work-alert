@@ -8,9 +8,15 @@ BOT_TOKEN = os.environ["BOT_TOKEN"]
 CHAT_ID = "948070176"
 
 now = datetime.now(ZoneInfo("Asia/Seoul"))
+weekday = now.weekday()  # 월=0 ... 일=6
+now_total = now.hour * 60 + now.minute
 
-weekday = now.weekday()
-current_time = now.strftime("%H:%M")
+# 스케줄이 몇 분 늦게 돌아도 알림이 나가도록 허용 범위(분)
+TOLERANCE = 20
+
+def in_window(target_hour, target_minute):
+    target_total = target_hour * 60 + target_minute
+    return abs(now_total - target_total) <= TOLERANCE
 
 message = None
 
@@ -20,23 +26,23 @@ if os.environ.get("GITHUB_EVENT_NAME") == "workflow_dispatch":
 
 else:
     # 매일 23:50
-    if current_time == "23:50":
+    if in_window(23, 50):
         message = "🔔 일일보고 작성 시간입니다."
 
     # 일요일 21:50
-    elif weekday == 6 and current_time == "21:50":
+    elif weekday == 6 and in_window(21, 50):
         message = "🔔 신앙관리교육 사전취합 시간입니다."
 
     # 월요일 21:50
-    elif weekday == 0 and current_time == "21:50":
+    elif weekday == 0 and in_window(21, 50):
         message = "🔔 수요일 사전예배 사전취합 시간입니다."
 
     # 목요일 21:50
-    elif weekday == 3 and current_time == "21:50":
+    elif weekday == 3 and in_window(21, 50):
         message = "🔔 구역예배 취합 시간입니다."
 
     # 금요일 21:50
-    elif weekday == 4 and current_time == "21:50":
+    elif weekday == 4 and in_window(21, 50):
         message = "🔔 전도단 사전취합 / 주일예배 사전취합 시간입니다."
 
 
@@ -57,4 +63,4 @@ if message:
     print("알림 전송 완료:", message)
 
 else:
-    print("조건에 맞는 알림 시간이 아닙니다. 전송을 스킵합니다.")
+    print("현재 알림 시간이 아닙니다.")
