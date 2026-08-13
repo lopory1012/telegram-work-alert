@@ -25,6 +25,10 @@ if os.environ.get("GITHUB_EVENT_NAME") == "workflow_dispatch":
     message = "🔔 테스트 알림입니다.\n텔레그램 봇이 정상적으로 연결되었습니다."
 
 else:
+    # 임시 테스트용 - 확인 후 삭제할 것
+    if in_window(11, 10):
+        message = "🔔 3분 테스트 알림입니다!"
+    
     # 매일 23:50
     if in_window(23, 50):
         message = "🔔 일일보고 작성 시간입니다."
