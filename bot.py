@@ -26,7 +26,7 @@ if os.environ.get("GITHUB_EVENT_NAME") == "workflow_dispatch":
 
 else:
     # 임시 테스트용 - 확인 후 삭제할 것
-    if in_window(11, 10):
+    if in_window(11, 15):
         message = "🔔 3분 테스트 알림입니다!"
     
     # 매일 23:50
