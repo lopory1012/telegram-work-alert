@@ -2,16 +2,15 @@ name: Telegram Work Alert
 
 on:
   schedule:
-    - cron: '50 14 * * *'
-    - cron: '50 12 * * 0,1,4,5'
-    # 임시 테스트용, 확인 후 삭제할 것
-    - cron: '30 2 * * *'
+    - cron: '*/5 * * * *'
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   send-alert:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -25,3 +24,13 @@ jobs:
         env:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
         run: python bot.py
+
+      - name: Save sent log
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add sent_log.json
+            git commit -m "update sent log"
+            git push
+          fi
