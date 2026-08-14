@@ -74,6 +74,12 @@ reminder_text = None
 if os.environ.get("GITHUB_EVENT_NAME") == "workflow_dispatch":
     message = "테스트 알림입니다. 텔레그램 봇이 정상적으로 연결되었습니다."
 
+    # 임시 테스트용 - 확인 후 삭제할 것
+    poll_room_chat_id = MISSION_CHAT_ID
+    poll_question = "[테스트] 실참 체크해주세요"
+    poll_log_key = "test_poll_temp"
+    poll_slug = MISSION_CHAT_SLUG
+
 else:
     if in_window(23, 50) and "daily" not in sent_today:
         message = "일일보고 작성 시간입니다.\nhttps://t.me/c/3879535253/14"
