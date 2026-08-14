@@ -11,10 +11,7 @@ LOG_FILE = "sent_log.json"
 TOLERANCE = 3
 
 MISSION_CHAT_ID = "-1001940900666"
-MISSION_CHAT_SLUG = "1940900666"
-
 EDU_CHAT_ID = "-1003809710264"
-EDU_CHAT_SLUG = "3809710264"
 
 now = datetime.now(ZoneInfo("Asia/Seoul"))
 weekday = now.weekday()
@@ -44,7 +41,7 @@ def send_poll(chat_id, question):
     result = api_call("sendPoll", {
         "chat_id": chat_id,
         "question": question,
-        "options": json.dumps(["참석", "불참"], ensure_ascii=False),
+        "options": json.dumps(["참석"], ensure_ascii=False),
         "is_anonymous": "false"
     })
     print("투표 생성:", result.get("ok"))
@@ -66,19 +63,10 @@ key = None
 
 poll_room_chat_id = None
 poll_question = None
-poll_log_key = None
-poll_slug = None
-reminder_text = None
 
 
 if os.environ.get("GITHUB_EVENT_NAME") == "workflow_dispatch":
     message = "테스트 알림입니다. 텔레그램 봇이 정상적으로 연결되었습니다."
-
-    # 임시 테스트용 - 확인 후 삭제할 것
-    poll_room_chat_id = MISSION_CHAT_ID
-    poll_question = "[테스트] 실참 체크해주세요"
-    poll_log_key = "test_poll_temp"
-    poll_slug = MISSION_CHAT_SLUG
 
 else:
     if in_window(23, 50) and "daily" not in sent_today:
@@ -105,97 +93,23 @@ else:
         message = "내일은 오전 7시 기도회가 있는 날입니다. 함께 기도합시다.\nhttps://t.me/suwon_gather_bot"
         key = "pray_reminder"
 
+    # ── 전도단 실참 체크 (금 10/17/20/22시, 시간대별 개별 투표) ──
     elif weekday == 4 and in_window(10, 0) and "mission_10" not in sent_today:
-        message = "전도단 실참 누적 해주세요!\nhttps://t.me/c/1940900666/11868"
         key = "mission_10"
         poll_room_chat_id = MISSION_CHAT_ID
-        poll_question = "전도단 오늘 실참 체크해주세요"
-        poll_log_key = "mission_poll"
-        poll_slug = MISSION_CHAT_SLUG
+        poll_question = "[전도단] 10:00 실참 체크"
     elif weekday == 4 and in_window(17, 0) and "mission_17" not in sent_today:
-        message = "전도단 실참 누적 해주세요!\nhttps://t.me/c/1940900666/11868"
         key = "mission_17"
         poll_room_chat_id = MISSION_CHAT_ID
-        poll_log_key = "mission_poll"
-        poll_slug = MISSION_CHAT_SLUG
-        reminder_text = "아직 실참 체크 안 하신 분은 위 투표에서 참석 눌러주세요!"
+        poll_question = "[전도단] 17:00 실참 체크"
     elif weekday == 4 and in_window(20, 0) and "mission_20" not in sent_today:
-        message = "전도단 실참 누적 해주세요!\nhttps://t.me/c/1940900666/11868"
         key = "mission_20"
         poll_room_chat_id = MISSION_CHAT_ID
-        poll_log_key = "mission_poll"
-        poll_slug = MISSION_CHAT_SLUG
-        reminder_text = "아직 실참 체크 안 하신 분은 위 투표에서 참석 눌러주세요!"
+        poll_question = "[전도단] 20:00 실참 체크"
     elif weekday == 4 and in_window(22, 0) and "mission_22" not in sent_today:
-        message = "전도단 실참 누적 해주세요!\nhttps://t.me/c/1940900666/11868"
         key = "mission_22"
         poll_room_chat_id = MISSION_CHAT_ID
-        poll_log_key = "mission_poll"
-        poll_slug = MISSION_CHAT_SLUG
-        reminder_text = "아직 실참 체크 안 하신 분은 위 투표에서 참석 눌러주세요!"
+        poll_question = "[전도단] 22:00 실참 체크"
 
-    elif weekday == 1 and in_window(9, 50) and "edu_0950" not in sent_today:
-        message = "신앙교육 실참 누적 해주세요!\nhttps://t.me/c/3809710264/3"
-        key = "edu_0950"
-        poll_room_chat_id = EDU_CHAT_ID
-        poll_question = "신앙교육 오늘 실참 체크해주세요"
-        poll_log_key = "edu_poll"
-        poll_slug = EDU_CHAT_SLUG
-    elif weekday == 1 and in_window(17, 0) and "edu_17" not in sent_today:
-        message = "신앙교육 실참 누적 해주세요!\nhttps://t.me/c/3809710264/3"
-        key = "edu_17"
-        poll_room_chat_id = EDU_CHAT_ID
-        poll_log_key = "edu_poll"
-        poll_slug = EDU_CHAT_SLUG
-        reminder_text = "아직 실참 체크 안 하신 분은 위 투표에서 참석 눌러주세요!"
-    elif weekday == 1 and in_window(20, 0) and "edu_20" not in sent_today:
-        message = "신앙교육 실참 누적 해주세요!\nhttps://t.me/c/3809710264/3"
-        key = "edu_20"
-        poll_room_chat_id = EDU_CHAT_ID
-        poll_log_key = "edu_poll"
-        poll_slug = EDU_CHAT_SLUG
-        reminder_text = "아직 실참 체크 안 하신 분은 위 투표에서 참석 눌러주세요!"
-    elif weekday == 1 and in_window(22, 0) and "edu_22" not in sent_today:
-        message = "신앙교육 실참 누적 해주세요!\nhttps://t.me/c/3809710264/3"
-        key = "edu_22"
-        poll_room_chat_id = EDU_CHAT_ID
-        poll_log_key = "edu_poll"
-        poll_slug = EDU_CHAT_SLUG
-        reminder_text = "아직 실참 체크 안 하신 분은 위 투표에서 참석 눌러주세요!"
-
-    elif weekday == 3 and in_window(10, 0) and "visit_report" not in sent_today:
-        message = "오늘은 심방보고 마감날입니다!\nhttps://t.me/suwon_internal_affair_bot"
-        key = "visit_report"
-
-
-did_something = False
-
-if message:
-    send_message(CHAT_ID, message)
-    print("알림 전송 완료:", message)
-    did_something = True
-
-if poll_room_chat_id and poll_question and poll_log_key not in sent_today:
-    poll_result = send_poll(poll_room_chat_id, poll_question)
-    if poll_result.get("ok"):
-        message_id = poll_result["result"]["message_id"]
-        sent_today[poll_log_key] = message_id
-    did_something = True
-
-elif poll_room_chat_id and reminder_text and poll_log_key in sent_today:
-    poll_message_id = sent_today.get(poll_log_key)
-    link_text = reminder_text
-    if isinstance(poll_message_id, int) and poll_slug:
-        link_text = link_text + "\nhttps://t.me/c/" + poll_slug + "/" + str(poll_message_id)
-    send_message(poll_room_chat_id, link_text)
-    did_something = True
-
-if did_something:
-    if key:
-        sent_today[key] = True
-    log[today_str] = sent_today
-    with open(LOG_FILE, "w", encoding="utf-8") as f:
-        json.dump(log, f, ensure_ascii=False, indent=2)
-    print("로그 저장 완료")
-else:
-    print("현재 알림 시간이 아니거나 이미 전송됨.")
+    # ── 신앙교육 실참 체크 (화 9:50/17/20/22시, 시간대별 개별 투표) ──
+    elif weekday == 1
