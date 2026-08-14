@@ -35,57 +35,61 @@ if os.environ.get("GITHUB_EVENT_NAME") == "workflow_dispatch":
 else:
     # ── 기존 취합 알림 ──────────────────────────
     if in_window(23, 50) and "daily" not in sent_today:
-        message = "🔔 일일보고 작성 시간입니다."
+        message = "🔔 일일보고 작성 시간입니다.\nhttps://t.me/c/3879535253/14"
         key = "daily"
     elif weekday == 6 and in_window(21, 50) and "sun" not in sent_today:
-        message = "🔔 신앙관리교육 사전취합 시간입니다."
+        message = "🔔 신앙관리교육 사전취합 시간입니다.\nhttps://t.me/c/3809710264/3"
         key = "sun"
     elif weekday == 0 and in_window(21, 50) and "mon" not in sent_today:
-        message = "🔔 수요일 사전예배 사전취합 시간입니다."
+        message = "🔔 수요일 사전예배 사전취합 시간입니다.\nhttps://t.me/c/2817611748/5580"
         key = "mon"
     elif weekday == 3 and in_window(21, 50) and "thu" not in sent_today:
-        message = "🔔 구역예배 취합 시간입니다."
+        message = "🔔 구역예배 취합 시간입니다.\nhttps://t.me/abcde0156"
         key = "thu"
     elif weekday == 4 and in_window(21, 50) and "fri" not in sent_today:
-        message = "🔔 전도단 사전취합 / 주일예배 사전취합 시간입니다."
+        message = (
+            "🔔 전도단 사전취합 / 주일예배 사전취합 시간입니다.\n"
+            "전도단: https://t.me/c/1940900666/11868\n"
+            "주일예배: https://t.me/c/2817611748/5580"
+        )
         key = "fri"
 
     # ── 기도회 안내 (일/월/수/목/금 22시) ──────────
     elif weekday in (6, 0, 2, 3, 4) and in_window(22, 0) and "pray_reminder" not in sent_today:
-        message = "🙏 내일은 오전 7시 기도회가 있는 날입니다. 함께 기도합시다."
+        message = "🙏 내일은 오전 7시 기도회가 있는 날입니다. 함께 기도합시다.\nhttps://t.me/suwon_gather_bot"
         key = "pray_reminder"
 
     # ── 전도단 실참 누적 (금 10/17/20/22시) ────────
     elif weekday == 4 and in_window(10, 0) and "mission_10" not in sent_today:
-        message = "📋 전도단 실참 누적 해주세요!"
+        message = "📋 전도단 실참 누적 해주세요!\nhttps://t.me/c/1940900666/11868"
         key = "mission_10"
     elif weekday == 4 and in_window(17, 0) and "mission_17" not in sent_today:
-        message = "📋 전도단 실참 누적 해주세요!"
+        message = "📋 전도단 실참 누적 해주세요!\nhttps://t.me/c/1940900666/11868"
         key = "mission_17"
     elif weekday == 4 and in_window(20, 0) and "mission_20" not in sent_today:
-        message = "📋 전도단 실참 누적 해주세요!"
+        message = "📋 전도단 실참 누적 해주세요!\nhttps://t.me/c/1940900666/11868"
         key = "mission_20"
     elif weekday == 4 and in_window(22, 0) and "mission_22" not in sent_today:
-        message = "📋 전도단 실참 누적 해주세요!"
+        message = "📋 전도단 실참 누적 해주세요!\nhttps://t.me/c/1940900666/11868"
         key = "mission_22"
 
     # ── 신앙교육 실참 누적 (화 9:50/17/20/22시) ────
     elif weekday == 1 and in_window(9, 50) and "edu_0950" not in sent_today:
-        message = "📋 신앙교육 실참 누적 해주세요!"
+        message = "📋 신앙교육 실참 누적 해주세요!\nhttps://t.me/c/3809710264/3"
         key = "edu_0950"
     elif weekday == 1 and in_window(17, 0) and "edu_17" not in sent_today:
-        message = "📋 신앙교육 실참 누적 해주세요!"
+        message = "📋 신앙교육 실참 누적 해주세요!\nhttps://t.me/c/3809710264/3"
         key = "edu_17"
     elif weekday == 1 and in_window(20, 0) and "edu_20" not in sent_today:
-        message = "📋 신앙교육 실참 누적 해주세요!"
+        message = "📋 신앙교육 실참 누적 해주세요!\nhttps://t.me/c/3809710264/3"
         key = "edu_20"
     elif weekday == 1 and in_window(22, 0) and "edu_22" not in sent_today:
-        message = "📋 신앙교육 실참 누적 해주세요!"
+        message = "📋 신앙교육 실참 누적 해주세요!\nhttps://t.me/c/3809710264/3"
         key = "edu_22"
 
     # ── 심방보고 마감 안내 (목 10시) ────────────────
     elif weekday == 3 and in_window(10, 0) and "visit_report" not in sent_today:
-        message = "📌 오늘은 심방보고 마감날입니다!"
+        message = "📌 오늘은 심방보고 마감날입니다!\nhttps://t.me/suwon_internal_affair_bot"
         key = "visit_report"
 
 
