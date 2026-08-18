@@ -106,7 +106,8 @@ summary_label = None
 
 is_auto_trigger = os.environ.get("INPUT_AUTO") == "true"
 
-if os.environ.get("GITHUB_EVENT_NAME") == "workflow_dispatch" and not is_auto_trigger:
+if os.environ.get("GITHUB_EVENT_NAME") == "workflow_dispatch":
+    message = "테스트 알림입니다. 텔레그램 봇이 정상적으로 연결되었습니다."
 
 else:
     if in_window(23, 50) and "daily" not in sent_today:
