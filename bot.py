@@ -66,7 +66,9 @@ poll_question = None
 
 
 if os.environ.get("GITHUB_EVENT_NAME") == "workflow_dispatch":
-    message = "테스트 알림입니다. 텔레그램 봇이 정상적으로 연결되었습니다."
+    message = "신앙교육 09:50 실참 체크 투표가 올라갔습니다."
+    poll_room_chat_id = EDU_CHAT_ID
+    poll_question = "[신앙교육] 09:50 실참 체크"
 
 else:
     if in_window(23, 50) and "daily" not in sent_today:
