@@ -1,42 +1,40 @@
-name: Telegram Work Alert
+name: 텔레그램 업무 알림
 
 on:
   schedule:
-    - cron: '50 14 * * *'
-    - cron: '50 12 * * 0,1,4,5'
+    # 매분 실행
+    - cron: '* * * * *'
+
   workflow_dispatch:
-    inputs:
-      auto:
-        description: '자동 트리거 여부'
-        required: false
-        default: 'false'
 
 permissions:
   contents: write
 
 jobs:
-  send-alert:
+  telegram-alert:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout
+
+      - name: 체크아웃
         uses: actions/checkout@v4
 
-      - name: Set up Python
+      - name: 파이썬 설정
         uses: actions/setup-python@v5
         with:
           python-version: '3.x'
 
-      - name: Send Telegram alert
+      - name: 텔레그램 알림 보내기
         env:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
         run: python bot.py
 
-      - name: Save sent log
+      - name: 전송된 로그 저장
         run: |
           if [ -n "$(git status --porcelain)" ]; then
             git config user.name "github-actions[bot]"
             git config user.email "github-actions[bot]@users.noreply.github.com"
             git add sent_log.json
-            git commit -m "update sent log"
+            git commit -m "전송된 로그 업데이트"
             git push
           fi
