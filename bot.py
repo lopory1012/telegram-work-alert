@@ -10,8 +10,8 @@ CHAT_ID = "948070176"
 LOG_FILE = "sent_log.json"
 TOLERANCE = 3
 
-MISSION_CHAT_ID = "-5144445256"
-EDU_CHAT_ID = "-5144445256"
+MISSION_CHAT_ID = "-5109559157"
+EDU_CHAT_ID = "-5109559157"
 
 now = datetime.now(ZoneInfo("Asia/Seoul"))
 weekday = now.weekday()
