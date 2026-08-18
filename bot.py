@@ -7,13 +7,11 @@ from zoneinfo import ZoneInfo
 
 BOT_TOKEN = os.environ["BOT_TOKEN"]
 
-# 취합알리미가 명단을 받을 채팅방
+# 명단을 받을 취합알리미
 CHAT_ID = "948070176"
 
-# 전도단 투표방
+# 전도단 / 신앙교육 투표방
 MISSION_CHAT_ID = "-5109559157"
-
-# 신앙교육 투표방
 EDU_CHAT_ID = "-5109559157"
 
 LOG_FILE = "sent_log.json"
@@ -27,23 +25,13 @@ TOLERANCE = 3
 now = datetime.now(ZoneInfo("Asia/Seoul"))
 
 weekday = now.weekday()
-
-now_total = (
-    now.hour * 60
-    + now.minute
-)
-
+now_total = now.hour * 60 + now.minute
 today_str = now.strftime("%Y-%m-%d")
 
 
-# ============================================================
-# 시간 확인
-# ============================================================
-
-def in_window(h, m):
-
+def in_window(hour, minute):
     return abs(
-        now_total - (h * 60 + m)
+        now_total - (hour * 60 + minute)
     ) <= TOLERANCE
 
 
@@ -60,9 +48,7 @@ def api_call(method, payload):
         + method
     )
 
-    data = urllib.parse.urlencode(
-        payload
-    ).encode()
+    data = urllib.parse.urlencode(payload).encode()
 
     req = urllib.request.Request(
         url,
@@ -70,7 +56,6 @@ def api_call(method, payload):
     )
 
     with urllib.request.urlopen(req) as response:
-
         return json.loads(
             response.read().decode()
         )
@@ -145,12 +130,9 @@ else:
 
 
 if "last_update_id" not in log:
-
     log["last_update_id"] = 0
 
-
 if "polls" not in log:
-
     log["polls"] = {}
 
 
@@ -158,7 +140,6 @@ sent_today = log.get(
     today_str,
     {}
 )
-
 
 if isinstance(sent_today, list):
 
@@ -169,7 +150,7 @@ if isinstance(sent_today, list):
 
 
 # ============================================================
-# ⭐ Telegram에 남아 있는 투표 응답 확인
+# ⭐ 투표 응답 수집
 # ============================================================
 
 print("")
@@ -178,16 +159,32 @@ print("⭐ 투표 응답 확인")
 print("========================================")
 
 
-updates = api_call(
-    "getUpdates",
-    {
-        "offset": log["last_update_id"] + 1,
-        "timeout": 0
-    }
-).get(
-    "result",
-    []
-)
+try:
+
+    result = api_call(
+        "getUpdates",
+        {
+            "offset": log["last_update_id"] + 1,
+            "timeout": 0,
+            "allowed_updates": json.dumps(
+                ["poll_answer"]
+            )
+        }
+    )
+
+    updates = result.get(
+        "result",
+        []
+    )
+
+except Exception as e:
+
+    print(
+        "투표 응답 확인 오류:",
+        e
+    )
+
+    updates = []
 
 
 print(
@@ -208,13 +205,13 @@ for upd in updates:
     )
 
     if not poll_answer:
-
         continue
 
 
     poll_id = poll_answer.get(
         "poll_id"
     )
+
 
     print("")
     print("⭐ 투표 응답 발견")
@@ -224,21 +221,37 @@ for upd in updates:
     )
 
 
+    # 우리가 만든 투표인지 확인
+    if poll_id not in log["polls"]:
+
+        print(
+            "우리 봇이 만든 투표가 아닙니다."
+        )
+
+        continue
+
+
     user = poll_answer.get(
         "user",
         {}
     )
 
 
-    name = user.get(
+    first_name = user.get(
         "first_name",
         ""
     )
 
+    last_name = user.get(
+        "last_name",
+        ""
+    )
 
-    if user.get("last_name"):
 
-        name += " " + user["last_name"]
+    name = first_name
+
+    if last_name:
+        name += " " + last_name
 
 
     print(
@@ -247,29 +260,37 @@ for upd in updates:
     )
 
 
-    # 기존 투표 기록이 있으면 저장
-    if poll_id in log["polls"]:
+    voters = log["polls"][poll_id].setdefault(
+        "voters",
+        {}
+    )
 
-        voters = log["polls"][poll_id].setdefault(
-            "voters",
-            {}
+
+    # 참석을 눌렀으면 저장
+    if poll_answer.get("option_ids"):
+
+        voters[
+            str(user["id"])
+        ] = name
+
+        print(
+            "✅ 참석자 저장:",
+            name
         )
 
 
-        if poll_answer.get(
-            "option_ids"
-        ):
+    # 취소했다면 삭제
+    else:
 
-            voters[
-                str(user["id"])
-            ] = name
+        voters.pop(
+            str(user["id"]),
+            None
+        )
 
-        else:
-
-            voters.pop(
-                str(user["id"]),
-                None
-            )
+        print(
+            "❌ 참석 취소:",
+            name
+        )
 
 
 # ============================================================
@@ -291,7 +312,7 @@ with open(
 
 
 # ============================================================
-# 기본 변수
+# 변수
 # ============================================================
 
 message = None
@@ -396,25 +417,8 @@ elif (
 
 
 # ============================================================
-# 전도단 투표
+# ⭐ 전도단 투표
 # ============================================================
-
-elif (
-    weekday == 4
-    and in_window(10, 0)
-    and "mission_10" not in sent_today
-):
-
-    key = "mission_10"
-
-    poll_room_chat_id = MISSION_CHAT_ID
-
-    poll_question = (
-        "[전도단] 10:00 실참 체크"
-    )
-
-    poll_key = "mission_10"
-
 
 elif (
     weekday == 4
@@ -468,7 +472,7 @@ elif (
 
 
 # ============================================================
-# 신앙교육 투표
+# ⭐ 신앙교육 투표
 # ============================================================
 
 elif (
@@ -558,21 +562,8 @@ elif (
 
 
 # ============================================================
-# 자동 명단
+# ⭐ 명단 전송
 # ============================================================
-
-elif (
-    weekday == 4
-    and in_window(10, 10)
-    and "mission_10_summary" not in sent_today
-):
-
-    summary_key = "mission_10_summary"
-
-    summary_for = "mission_10"
-
-    summary_label = "[전도단] 10:00"
-
 
 elif (
     weekday == 4
@@ -581,9 +572,7 @@ elif (
 ):
 
     summary_key = "mission_17_summary"
-
     summary_for = "mission_17"
-
     summary_label = "[전도단] 17:00"
 
 
@@ -594,9 +583,7 @@ elif (
 ):
 
     summary_key = "mission_20_summary"
-
     summary_for = "mission_20"
-
     summary_label = "[전도단] 20:00"
 
 
@@ -607,9 +594,7 @@ elif (
 ):
 
     summary_key = "mission_22_summary"
-
     summary_for = "mission_22"
-
     summary_label = "[전도단] 22:00"
 
 
@@ -620,9 +605,7 @@ elif (
 ):
 
     summary_key = "edu_0950_summary"
-
     summary_for = "edu_0950"
-
     summary_label = "[신앙교육] 09:50"
 
 
@@ -633,9 +616,7 @@ elif (
 ):
 
     summary_key = "edu_17_summary"
-
     summary_for = "edu_17"
-
     summary_label = "[신앙교육] 17:00"
 
 
@@ -646,9 +627,7 @@ elif (
 ):
 
     summary_key = "edu_20_summary"
-
     summary_for = "edu_20"
-
     summary_label = "[신앙교육] 20:00"
 
 
@@ -659,14 +638,12 @@ elif (
 ):
 
     summary_key = "edu_22_summary"
-
     summary_for = "edu_22"
-
     summary_label = "[신앙교육] 22:00"
 
 
 # ============================================================
-# 일반 메시지 전송
+# 일반 알림 전송
 # ============================================================
 
 did_something = False
@@ -707,23 +684,26 @@ if (
             poll_result["result"]["poll"]["id"]
         )
 
-
         log["polls"][poll_id] = {
             "key": poll_key,
             "voters": {}
         }
 
-
         sent_today[
             poll_key + "_poll_id"
         ] = poll_id
 
+        print(
+            "⭐ 투표 저장:",
+            poll_key,
+            poll_id
+        )
 
     did_something = True
 
 
 # ============================================================
-# 자동 명단 전송
+# 명단 전송
 # ============================================================
 
 if summary_key:
@@ -774,162 +754,41 @@ if summary_key:
     )
 
 
+    print(
+        "⭐ 명단 전송:",
+        text
+    )
+
+
     sent_today[
         summary_key
     ] = True
-
 
     did_something = True
 
 
 # ============================================================
-# ⭐ 지난 10시 명단 확인
+# 로그 최종 저장
 # ============================================================
 
-print("")
-print("========================================")
-print("⭐ 지난 10시 전도단 명단 확인")
-print("========================================")
+if key:
+    sent_today[key] = True
 
 
-mission_10_found = []
+log[today_str] = sent_today
 
 
-for poll_id, poll_data in log.get(
-    "polls",
-    {}
-).items():
+with open(
+    LOG_FILE,
+    "w",
+    encoding="utf-8"
+) as f:
 
-    if poll_data.get(
-        "key"
-    ) == "mission_10":
-
-        mission_10_found.append(
-            (
-                poll_id,
-                poll_data
-            )
-        )
-
-
-print(
-    "저장된 mission_10 투표:",
-    len(mission_10_found)
-)
-
-
-# ============================================================
-# 기존 로그에 mission_10 투표가 있는 경우
-# ============================================================
-
-if mission_10_found:
-
-    # 가장 최근 것 사용
-    poll_id, poll_data = (
-        mission_10_found[-1]
-    )
-
-
-    voters = poll_data.get(
-        "voters",
-        {}
-    )
-
-
-    names = list(
-        voters.values()
-    )
-
-
-    print(
-        "⭐ 확인된 참여자:",
-        len(names),
-        "명"
-    )
-
-
-    if names:
-
-        text = (
-            "[전도단] 지난 10:00 실참 명단 ("
-            + str(len(names))
-            + "명)\n"
-            + "\n".join(names)
-        )
-
-    else:
-
-        text = (
-            "[전도단] 지난 10:00 실참 명단: "
-            "아직 없음"
-        )
-
-
-    send_message(
-        CHAT_ID,
-        text
-    )
-
-
-    print(
-        "⭐ 지난 10시 명단 전송 완료"
-    )
-
-
-# ============================================================
-# 기존 로그에 없는 경우
-# ============================================================
-
-else:
-
-    print("")
-    print(
-        "❌ 기존 로그에는 mission_10 투표가 없습니다."
-    )
-
-    print(
-        "현재 Telegram에 남아 있는 poll_answer를 "
-        "확인합니다."
-    )
-
-
-# ============================================================
-# 로그 저장
-# ============================================================
-
-if did_something:
-
-    if key:
-
-        sent_today[key] = True
-
-
-    log[today_str] = sent_today
-
-
-    with open(
-        LOG_FILE,
-        "w",
-        encoding="utf-8"
-    ) as f:
-
-        json.dump(
-            log,
-            f,
-            ensure_ascii=False,
-            indent=2
-        )
-
-
-    print(
-        "로그 저장 완료"
-    )
-
-
-else:
-
-    print(
-        "현재 알림 시간이 아니거나 이미 전송됨."
+    json.dump(
+        log,
+        f,
+        ensure_ascii=False,
+        indent=2
     )
 
 
