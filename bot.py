@@ -154,7 +154,7 @@ if isinstance(sent_today, list):
 
 
 # ============================================================
-# 1. 투표 응답 수집
+# 1. 새로운 투표 응답 수집
 # ============================================================
 
 print("투표 응답 확인 중...")
@@ -714,110 +714,119 @@ if summary_key:
 
 
 # ============================================================
-# ⭐ 11. 지난 10시 명단 강제 전송
+# ⭐ 11. 지난 10시 전도단 명단 찾기
 # ============================================================
 
 print("")
-print("================================")
-print("⭐ 지난 10시 명단 확인 시작")
-print("================================")
+print("========================================")
+print("⭐ 지난 10시 전도단 명단 찾기 시작")
+print("========================================")
 
 
-past_poll_id = None
-past_poll_date = None
+found_poll_id = None
+found_poll = None
 
 
-# 오늘을 제외하고 가장 최근 날짜부터 확인
-date_keys = sorted(
-    [
-        k
-        for k in log.keys()
-        if k != today_str
-        and k not in [
-            "last_update_id",
-            "polls"
-        ]
-        and isinstance(
-            log.get(k),
-            dict
-        )
-    ],
-    reverse=True
+# ------------------------------------------------------------
+# polls 안에 저장된 모든 투표 확인
+# ------------------------------------------------------------
+
+all_polls = log.get(
+    "polls",
+    {}
 )
 
 
 print(
-    "지난 날짜 기록:",
-    date_keys
+    "저장된 투표 개수:",
+    len(all_polls)
 )
 
 
-for date_key in date_keys:
+# 가장 최근 투표부터 확인하기 위해 뒤집어서 검사
+poll_items = list(
+    all_polls.items()
+)
+
+poll_items.reverse()
+
+
+for poll_id, poll_data in poll_items:
+
+    poll_key_value = poll_data.get(
+        "key"
+    )
+
 
     print(
-        "확인 중:",
-        date_key
+        "투표 확인:",
+        poll_key_value,
+        "|",
+        poll_id
     )
 
 
-    poll_id = log[date_key].get(
-        "mission_10_poll_id"
-    )
+    # 전도단 10시 투표인지 확인
+    if poll_key_value == "mission_10":
 
+        found_poll_id = poll_id
 
-    if poll_id:
+        found_poll = poll_data
 
-        past_poll_id = poll_id
-
-        past_poll_date = date_key
-
+        print("")
         print(
-            "⭐ 10시 투표 발견:",
-            date_key
+            "⭐ 전도단 10시 투표 발견!"
         )
 
         print(
             "poll_id:",
-            poll_id
+            found_poll_id
         )
 
         break
 
 
 # ============================================================
-# 투표가 발견된 경우
+# 투표를 찾은 경우
 # ============================================================
 
-if (
-    past_poll_id
-    and past_poll_id in log["polls"]
-):
+if found_poll:
 
-    names = list(
-        log["polls"][past_poll_id]
-        .get("voters", {})
-        .values()
+    voters = found_poll.get(
+        "voters",
+        {}
     )
 
 
+    names = list(
+        voters.values()
+    )
+
+
+    print("")
     print(
-        "⭐ 지난 10시 참여 인원:",
+        "⭐ 10시 참여 인원:",
         len(names)
     )
 
 
     print(
-        "⭐ 지난 10시 참여자:",
-        names
+        "⭐ 10시 참여자:"
     )
+
+
+    for name in names:
+
+        print(
+            "-",
+            name
+        )
 
 
     if names:
 
         text = (
-            "[전도단] "
-            + past_poll_date
-            + " 10:00 실참 명단 ("
+            "[전도단] 10:00 실참 명단 ("
             + str(len(names))
             + "명)\n"
             + "\n".join(names)
@@ -826,10 +835,15 @@ if (
     else:
 
         text = (
-            "[전도단] "
-            + past_poll_date
-            + " 10:00 실참 명단: 아직 없음"
+            "[전도단] 10:00 실참 명단: "
+            "아직 없음"
         )
+
+
+    print("")
+    print(
+        "⭐ 취합알리미로 명단 전송 중..."
+    )
 
 
     result = send_message(
@@ -839,32 +853,31 @@ if (
 
 
     print(
-        "⭐ 지난 10시 명단 전송 결과:",
+        "⭐ 텔레그램 전송 결과:",
         result
     )
 
 
 # ============================================================
-# 투표를 찾지 못한 경우
+# 투표를 못 찾은 경우
 # ============================================================
-
-elif past_poll_id:
-
-    print(
-        "❌ 투표 ID는 찾았지만 polls 기록에서 찾을 수 없습니다."
-    )
 
 else:
 
+    print("")
     print(
-        "❌ 지난 10시 전도단 투표 기록을 찾지 못했습니다."
+        "❌ polls 안에서 mission_10 투표를 찾지 못했습니다."
+    )
+
+    print(
+        "저장된 투표의 key를 확인하세요."
     )
 
 
 print("")
-print("================================")
+print("========================================")
 print("⭐ 지난 10시 명단 확인 종료")
-print("================================")
+print("========================================")
 
 
 # ============================================================
@@ -898,6 +911,7 @@ if did_something:
     print(
         "로그 저장 완료"
     )
+
 
 else:
 
