@@ -422,6 +422,23 @@ elif (
 
 elif (
     weekday == 4
+    and in_window(10, 0)
+    and "mission_10" not in sent_today
+):
+
+    key = "mission_10"
+
+    poll_room_chat_id = MISSION_CHAT_ID
+
+    poll_question = (
+        "[전도단] 10:00 실참 체크"
+    )
+
+    poll_key = "mission_10"
+
+
+elif (
+    weekday == 4
     and in_window(17, 0)
     and "mission_17" not in sent_today
 ):
@@ -564,6 +581,17 @@ elif (
 # ============================================================
 # ⭐ 명단 전송
 # ============================================================
+
+elif (
+    weekday == 4
+    and in_window(10, 10)
+    and "mission_10_summary" not in sent_today
+):
+
+    summary_key = "mission_10_summary"
+    summary_for = "mission_10"
+    summary_label = "[전도단] 10:00"
+
 
 elif (
     weekday == 4
