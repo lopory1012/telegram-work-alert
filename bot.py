@@ -14,12 +14,11 @@ MISSION_CHAT_ID = "-5109559157"
 EDU_CHAT_ID = "-5109559157"
 
 # ============================================================
-# 🔎 지난 10:00 전도단 명단을 지금 한 번 보내기
+# 설정
 # ============================================================
-# True로 해놓고 한 번 실행하면 지난 10시 명단을 보내줍니다.
-# 명단을 받은 후에는 자동으로 다시 보내지지 않습니다.
-MANUAL_PAST_10 = True
-# ============================================================
+
+# True = 지난 10시 명단을 한 번 확인해서 텔레그램으로 보냄
+CHECK_PAST_10 = True
 
 
 now = datetime.now(ZoneInfo("Asia/Seoul"))
@@ -35,6 +34,7 @@ def in_window(h, m):
 def api_call(method, payload):
     url = "https://api.telegram.org/bot" + BOT_TOKEN + "/" + method
     data = urllib.parse.urlencode(payload).encode()
+
     req = urllib.request.Request(url, data=data)
 
     with urllib.request.urlopen(req) as response:
@@ -51,6 +51,7 @@ def send_message(chat_id, text):
     )
 
     print("메시지 전송:", result.get("ok"))
+
     return result
 
 
@@ -60,12 +61,16 @@ def send_poll(chat_id, question):
         {
             "chat_id": chat_id,
             "question": question,
-            "options": json.dumps(["참석"], ensure_ascii=False),
+            "options": json.dumps(
+                ["참석"],
+                ensure_ascii=False
+            ),
             "is_anonymous": "false"
         }
     )
 
     print("투표 생성:", result.get("ok"))
+
     return result
 
 
@@ -86,30 +91,50 @@ def get_updates(offset):
 # ============================================================
 
 if os.path.exists(LOG_FILE):
-    with open(LOG_FILE, "r", encoding="utf-8") as f:
+
+    with open(
+        LOG_FILE,
+        "r",
+        encoding="utf-8"
+    ) as f:
+
         log = json.load(f)
+
 else:
+
     log = {}
 
 
 if "last_update_id" not in log:
     log["last_update_id"] = 0
 
+
 if "polls" not in log:
     log["polls"] = {}
 
 
-sent_today = log.get(today_str, {})
+sent_today = log.get(
+    today_str,
+    {}
+)
+
 
 if isinstance(sent_today, list):
-    sent_today = {k: True for k in sent_today}
+
+    sent_today = {
+        k: True
+        for k in sent_today
+    }
 
 
 # ============================================================
-# 1) 새로 들어온 투표 응답 수집
+# 1. 새로운 투표 응답 가져오기
 # ============================================================
 
-updates = get_updates(log["last_update_id"] + 1)
+updates = get_updates(
+    log["last_update_id"] + 1
+)
+
 
 for upd in updates:
 
@@ -130,25 +155,41 @@ for upd in updates:
 
     user = pa["user"]
 
-    name = user.get("first_name", "") + (
-        (" " + user["last_name"])
-        if user.get("last_name")
-        else ""
+    name = user.get(
+        "first_name",
+        ""
     )
+
+    if user.get("last_name"):
+
+        name += " " + user["last_name"]
+
 
     voters = log["polls"][poll_id].setdefault(
         "voters",
         {}
     )
 
+
     if pa.get("option_ids"):
+
         voters[str(user["id"])] = name
+
     else:
-        voters.pop(str(user["id"]), None)
+
+        voters.pop(
+            str(user["id"]),
+            None
+        )
 
 
 # 로그 저장
-with open(LOG_FILE, "w", encoding="utf-8") as f:
+with open(
+    LOG_FILE,
+    "w",
+    encoding="utf-8"
+) as f:
+
     json.dump(
         log,
         f,
@@ -158,7 +199,7 @@ with open(LOG_FILE, "w", encoding="utf-8") as f:
 
 
 # ============================================================
-# 2) 알림 / 투표 로직
+# 2. 일반 알림 / 투표 설정
 # ============================================================
 
 message = None
@@ -177,7 +218,10 @@ summary_label = None
 # 일반 알림
 # ============================================================
 
-if in_window(23, 50) and "daily" not in sent_today:
+if (
+    in_window(23, 50)
+    and "daily" not in sent_today
+):
 
     message = (
         "일일보고 작성 시간입니다.\n"
@@ -187,7 +231,11 @@ if in_window(23, 50) and "daily" not in sent_today:
     key = "daily"
 
 
-elif weekday == 6 and in_window(21, 50) and "sun" not in sent_today:
+elif (
+    weekday == 6
+    and in_window(21, 50)
+    and "sun" not in sent_today
+):
 
     message = (
         "신앙관리교육 사전취합 시간입니다.\n"
@@ -197,7 +245,11 @@ elif weekday == 6 and in_window(21, 50) and "sun" not in sent_today:
     key = "sun"
 
 
-elif weekday == 0 and in_window(21, 50) and "mon" not in sent_today:
+elif (
+    weekday == 0
+    and in_window(21, 50)
+    and "mon" not in sent_today
+):
 
     message = (
         "수요일 사전예배 사전취합 시간입니다.\n"
@@ -207,7 +259,11 @@ elif weekday == 0 and in_window(21, 50) and "mon" not in sent_today:
     key = "mon"
 
 
-elif weekday == 3 and in_window(21, 50) and "thu" not in sent_today:
+elif (
+    weekday == 3
+    and in_window(21, 50)
+    and "thu" not in sent_today
+):
 
     message = (
         "구역예배 취합 시간입니다.\n"
@@ -217,7 +273,11 @@ elif weekday == 3 and in_window(21, 50) and "thu" not in sent_today:
     key = "thu"
 
 
-elif weekday == 4 and in_window(21, 50) and "fri" not in sent_today:
+elif (
+    weekday == 4
+    and in_window(21, 50)
+    and "fri" not in sent_today
+):
 
     message = (
         "전도단 사전취합 / 주일예배 사전취합 시간입니다.\n"
@@ -458,7 +518,7 @@ elif (
 
 
 # ============================================================
-# 3) 일반 알림 전송
+# 3. 일반 알림 보내기
 # ============================================================
 
 did_something = False
@@ -480,32 +540,41 @@ if message:
 
 
 # ============================================================
-# 4) 투표 생성
+# 4. 투표 만들기
 # ============================================================
 
-if poll_room_chat_id and poll_question:
+if (
+    poll_room_chat_id
+    and poll_question
+):
 
     poll_result = send_poll(
         poll_room_chat_id,
         poll_question
     )
 
+
     if poll_result.get("ok"):
 
-        poll_id = poll_result["result"]["poll"]["id"]
+        poll_id = (
+            poll_result["result"]["poll"]["id"]
+        )
 
         log["polls"][poll_id] = {
             "key": poll_key,
             "voters": {}
         }
 
-        sent_today[poll_key + "_poll_id"] = poll_id
+        sent_today[
+            poll_key + "_poll_id"
+        ] = poll_id
+
 
     did_something = True
 
 
 # ============================================================
-# 5) 정해진 시간의 명단 자동 전송
+# 5. 정해진 시간 명단 자동 전송
 # ============================================================
 
 if summary_key:
@@ -516,13 +585,18 @@ if summary_key:
 
     names = []
 
-    if poll_id and poll_id in log["polls"]:
+
+    if (
+        poll_id
+        and poll_id in log["polls"]
+    ):
 
         names = list(
             log["polls"][poll_id]
             .get("voters", {})
             .values()
         )
+
 
     if names:
 
@@ -541,6 +615,7 @@ if summary_key:
             + " 실참 명단: 아직 없음"
         )
 
+
     send_message(
         CHAT_ID,
         text
@@ -551,109 +626,196 @@ if summary_key:
         text
     )
 
-    sent_today[summary_key] = True
+    sent_today[
+        summary_key
+    ] = True
 
     did_something = True
 
 
 # ============================================================
-# 6) ⭐ 지난 10:00 전도단 명단 강제 확인
+# ⭐ 6. 지난 10:00 전도단 명단 확인
 # ============================================================
 
-if (
-    MANUAL_PAST_10
-    and "manual_past_10_sent" not in sent_today
-):
+if CHECK_PAST_10:
+
+    print("")
+    print("================================")
+    print("지난 10시 명단 확인 시작")
+    print("================================")
+
 
     past_poll_id = None
     past_poll_date = None
 
-    # 오늘을 제외하고 가장 최근 날짜부터 찾기
+
+    # 날짜별 기록 확인
     date_keys = sorted(
         [
-            k for k in log.keys()
+            k
+            for k in log.keys()
             if k != today_str
-            and isinstance(log.get(k), dict)
+            and k not in [
+                "last_update_id",
+                "polls"
+            ]
+            and isinstance(
+                log.get(k),
+                dict
+            )
         ],
         reverse=True
     )
 
+
+    print(
+        "확인할 지난 날짜:",
+        date_keys
+    )
+
+
     for date_key in date_keys:
+
+        print(
+            "확인 중:",
+            date_key
+        )
+
 
         poll_id = log[date_key].get(
             "mission_10_poll_id"
         )
 
+
         if poll_id:
+
+            print(
+                "10시 투표 발견!"
+            )
+
+            print(
+                "날짜:",
+                date_key
+            )
+
+            print(
+                "poll_id:",
+                poll_id
+            )
+
 
             past_poll_id = poll_id
             past_poll_date = date_key
+
             break
 
 
-    # 지난 10시 투표가 발견된 경우
-    if (
-        past_poll_id
-        and past_poll_id in log["polls"]
-    ):
+    # ========================================================
+    # 투표 ID를 찾은 경우
+    # ========================================================
 
-        names = list(
-            log["polls"][past_poll_id]
-            .get("voters", {})
-            .values()
+    if past_poll_id:
+
+        print(
+            "지난 10시 투표 ID:",
+            past_poll_id
         )
 
-        if names:
 
-            text = (
-                "[전도단] "
-                + past_poll_date
-                + " 10:00 실참 명단 ("
-                + str(len(names))
-                + "명)\n"
-                + "\n".join(names)
+        if past_poll_id in log["polls"]:
+
+            names = list(
+                log["polls"][past_poll_id]
+                .get("voters", {})
+                .values()
             )
+
+
+            print(
+                "참여 인원:",
+                len(names)
+            )
+
+            print(
+                "참여자:",
+                names
+            )
+
+
+            if names:
+
+                text = (
+                    "[전도단] "
+                    + past_poll_date
+                    + " 10:00 실참 명단 ("
+                    + str(len(names))
+                    + "명)\n"
+                    + "\n".join(names)
+                )
+
+            else:
+
+                text = (
+                    "[전도단] "
+                    + past_poll_date
+                    + " 10:00 실참 명단: 아직 없음"
+                )
+
+
+            result = send_message(
+                CHAT_ID,
+                text
+            )
+
+
+            print(
+                "텔레그램 전송 결과:",
+                result
+            )
+
 
         else:
 
-            text = (
-                "[전도단] "
-                + past_poll_date
-                + " 10:00 실참 명단: 아직 없음"
+            print(
+                "❌ 투표 ID는 찾았지만 "
+                "polls 안에 해당 투표가 없습니다."
             )
 
-        send_message(
-            CHAT_ID,
-            text
-        )
 
-        print(
-            "지난 10시 명단 전송:",
-            text
-        )
-
-        # 다시 실행해도 중복 전송하지 않도록 기록
-        sent_today["manual_past_10_sent"] = True
-
-        did_something = True
+    # ========================================================
+    # 투표 ID를 못 찾은 경우
+    # ========================================================
 
     else:
 
+        print("")
         print(
-            "지난 10시 전도단 투표 기록을 찾을 수 없습니다."
+            "❌ 지난 10시 투표 기록을 찾지 못했습니다."
+        )
+        print(
+            "sent_log.json에 지난 10시 기록이 없는 상태입니다."
         )
 
 
+    print("")
+    print("================================")
+    print("지난 10시 명단 확인 끝")
+    print("================================")
+
+
 # ============================================================
-# 7) 로그 저장
+# 7. 로그 저장
 # ============================================================
 
 if did_something:
 
     if key:
+
         sent_today[key] = True
 
+
     log[today_str] = sent_today
+
 
     with open(
         LOG_FILE,
@@ -668,9 +830,11 @@ if did_something:
             indent=2
         )
 
+
     print(
         "로그 저장 완료"
     )
+
 
 else:
 
