@@ -91,7 +91,21 @@ for upd in updates:
 with open(LOG_FILE, "w", encoding="utf-8") as f:
     json.dump(log, f, ensure_ascii=False, indent=2)
 
-# 2) 알림/투표 로직 (수동 실행이든 자동이든 항상 시간 체크만 함)
+# 임시 테스트용 - 확인 후 삭제할 것
+force_poll_id = sent_today.get("edu_0950_poll_id")
+if force_poll_id and force_poll_id in log["polls"]:
+    force_names = list(log["polls"][force_poll_id].get("voters", {}).values())
+    if force_names:
+        force_text = "[신앙교육] 09:50 실참 명단 (" + str(len(force_names)) + "명)\n" + ", ".join(force_names)
+    else:
+        force_text = "[신앙교육] 09:50 실참 명단: 아직 없음"
+    send_message(CHAT_ID, force_text)
+    print("임시 명단 확인용 전송 완료")
+else:
+    print("09:50 투표 기록을 찾을 수 없음")
+
+
+# 2) 알림/투표 로직
 message = None
 key = None
 
