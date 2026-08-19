@@ -14,6 +14,9 @@ CHAT_ID = "948070176"
 MISSION_CHAT_ID = "-5109559157"
 EDU_CHAT_ID = "-5109559157"
 
+# 정오예배 실참취합 방
+NOON_WORSHIP_CHAT_ID = "-1002817611748"
+
 LOG_FILE = "sent_log.json"
 TOLERANCE = 3
 
@@ -61,10 +64,6 @@ def api_call(method, payload):
         )
 
 
-# ============================================================
-# 메시지 보내기
-# ============================================================
-
 def send_message(chat_id, text):
 
     result = api_call(
@@ -82,10 +81,6 @@ def send_message(chat_id, text):
 
     return result
 
-
-# ============================================================
-# 투표 만들기
-# ============================================================
 
 def send_poll(chat_id, question):
 
@@ -153,12 +148,6 @@ if isinstance(sent_today, list):
 # 투표 응답 수집
 # ============================================================
 
-print("")
-print("========================================")
-print("투표 응답 확인")
-print("========================================")
-
-
 try:
 
     result = api_call(
@@ -187,12 +176,6 @@ except Exception as e:
     updates = []
 
 
-print(
-    "새로운 업데이트:",
-    len(updates)
-)
-
-
 for upd in updates:
 
     log["last_update_id"] = max(
@@ -207,34 +190,17 @@ for upd in updates:
     if not poll_answer:
         continue
 
-
     poll_id = poll_answer.get(
         "poll_id"
     )
 
-
-    print("")
-    print("투표 응답 발견")
-    print(
-        "poll_id:",
-        poll_id
-    )
-
-
     if poll_id not in log["polls"]:
-
-        print(
-            "우리 봇이 만든 투표가 아닙니다."
-        )
-
         continue
-
 
     user = poll_answer.get(
         "user",
         {}
     )
-
 
     first_name = user.get(
         "first_name",
@@ -246,35 +212,21 @@ for upd in updates:
         ""
     )
 
-
     name = first_name
 
     if last_name:
         name += " " + last_name
-
-
-    print(
-        "투표자:",
-        name
-    )
-
 
     voters = log["polls"][poll_id].setdefault(
         "voters",
         {}
     )
 
-
     if poll_answer.get("option_ids"):
 
         voters[
             str(user["id"])
         ] = name
-
-        print(
-            "참석자 저장:",
-            name
-        )
 
     else:
 
@@ -283,15 +235,6 @@ for upd in updates:
             None
         )
 
-        print(
-            "참석 취소:",
-            name
-        )
-
-
-# ============================================================
-# 로그 저장
-# ============================================================
 
 with open(
     LOG_FILE,
@@ -312,6 +255,7 @@ with open(
 # ============================================================
 
 message = None
+message_target = CHAT_ID
 key = None
 
 poll_room_chat_id = None
@@ -324,10 +268,24 @@ summary_label = None
 
 
 # ============================================================
-# 일반 알림
+# 임시 테스트용 - 확인 후 삭제할 것
 # ============================================================
 
 if (
+    in_window(13, 40)
+    and "test_1340" not in sent_today
+):
+
+    message = "[테스트 메세지 입니다]\n정오예배 실참취합 누적해주세요!"
+    message_target = NOON_WORSHIP_CHAT_ID
+    key = "test_1340"
+
+
+# ============================================================
+# 일반 알림
+# ============================================================
+
+elif (
     in_window(23, 50)
     and "daily" not in sent_today
 ):
@@ -636,7 +594,7 @@ did_something = False
 if message:
 
     send_message(
-        CHAT_ID,
+        message_target,
         message
     )
 
@@ -673,12 +631,6 @@ if (
         sent_today[
             poll_key + "_poll_id"
         ] = poll_id
-
-        print(
-            "투표 저장:",
-            poll_key,
-            poll_id
-        )
 
         send_message(
             CHAT_ID,
@@ -765,7 +717,4 @@ with open(
     )
 
 
-print("")
-print("========================================")
 print("작업 종료")
-print("========================================")
