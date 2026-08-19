@@ -14,9 +14,6 @@ CHAT_ID = "948070176"
 MISSION_CHAT_ID = "-5109559157"
 EDU_CHAT_ID = "-5109559157"
 
-# 정오예배 실참취합 방
-NOON_WORSHIP_CHAT_ID = "-1002817611748"
-
 LOG_FILE = "sent_log.json"
 TOLERANCE = 3
 
@@ -255,7 +252,6 @@ with open(
 # ============================================================
 
 message = None
-message_target = CHAT_ID
 key = None
 
 poll_room_chat_id = None
@@ -268,24 +264,10 @@ summary_label = None
 
 
 # ============================================================
-# 임시 테스트용 - 확인 후 삭제할 것
-# ============================================================
-
-if (
-    in_window(13, 55)
-    and "test_1355" not in sent_today
-):
-
-    message = "[테스트 메세지 입니다]\n정오예배 실참취합 누적해주세요!"
-    message_target = NOON_WORSHIP_CHAT_ID
-    key = "test_1355"
-
-
-# ============================================================
 # 일반 알림
 # ============================================================
 
-elif (
+if (
     in_window(23, 50)
     and "daily" not in sent_today
 ):
@@ -594,7 +576,7 @@ did_something = False
 if message:
 
     send_message(
-        message_target,
+        CHAT_ID,
         message
     )
 
