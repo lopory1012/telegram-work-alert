@@ -272,13 +272,13 @@ summary_label = None
 # ============================================================
 
 if (
-    in_window(13, 40)
-    and "test_1340" not in sent_today
+    in_window(13, 55)
+    and "test_1355" not in sent_today
 ):
 
     message = "[테스트 메세지 입니다]\n정오예배 실참취합 누적해주세요!"
     message_target = NOON_WORSHIP_CHAT_ID
-    key = "test_1340"
+    key = "test_1355"
 
 
 # ============================================================
