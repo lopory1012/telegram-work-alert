@@ -12,5 +12,7 @@
     "pray_reminder": true,
     "daily": true
   },
-  "2026-08-20": {}
+  "2026-08-20": {
+    "visit_report": true
+  }
 }
