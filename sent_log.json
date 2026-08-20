@@ -15,6 +15,7 @@
   "2026-08-20": {
     "visit_report": true,
     "thu": true,
-    "pray_reminder": true
+    "pray_reminder": true,
+    "daily": true
   }
 }
