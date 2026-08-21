@@ -7,7 +7,12 @@
   },
   "2026-08-18": {},
   "last_update_id": 247092882,
-  "polls": {},
+  "polls": {
+    "6068894720321389433": {
+      "key": "mission_10",
+      "voters": {}
+    }
+  },
   "2026-08-19": {
     "pray_reminder": true,
     "daily": true
@@ -18,5 +23,8 @@
     "pray_reminder": true,
     "daily": true
   },
-  "2026-08-21": {}
+  "2026-08-21": {
+    "mission_10_poll_id": "6068894720321389433",
+    "mission_10": true
+  }
 }
