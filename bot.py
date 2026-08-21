@@ -174,6 +174,9 @@ except Exception as e:
 
 
 for upd in updates:
+    for upd in updates:
+
+    print("DEBUG RAW UPDATE:", json.dumps(upd, ensure_ascii=False))
 
     log["last_update_id"] = max(
         log["last_update_id"],
