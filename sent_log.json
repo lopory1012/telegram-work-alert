@@ -55,6 +55,7 @@
     "mission_20_summary": true,
     "fri": true,
     "pray_reminder": true,
-    "mission_22_summary": true
+    "mission_22_summary": true,
+    "daily": true
   }
 }
