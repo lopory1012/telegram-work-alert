@@ -17,6 +17,10 @@
       "voters": {
         "1917945903": "효정"
       }
+    },
+    "6071146520135074575": {
+      "key": "mission_20",
+      "voters": {}
     }
   },
   "2026-08-19": {
@@ -35,6 +39,8 @@
     "mission_10_summary": true,
     "mission_17_poll_id": "6071146520135074573",
     "mission_17": true,
-    "mission_17_summary": true
+    "mission_17_summary": true,
+    "mission_20_poll_id": "6071146520135074575",
+    "mission_20": true
   }
 }
