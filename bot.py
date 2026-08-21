@@ -142,7 +142,7 @@ if isinstance(sent_today, list):
 
 
 # ============================================================
-# 투표 응답 수집
+# 투표 응답 수집 (+ 디버그 로그)
 # ============================================================
 
 try:
@@ -151,10 +151,7 @@ try:
         "getUpdates",
         {
             "offset": log["last_update_id"] + 1,
-            "timeout": 0,
-            "allowed_updates": json.dumps(
-                ["poll_answer"]
-            )
+            "timeout": 0
         }
     )
 
@@ -173,8 +170,9 @@ except Exception as e:
     updates = []
 
 
+print("DEBUG 업데이트 개수:", len(updates))
+
 for upd in updates:
-    for upd in updates:
 
     print("DEBUG RAW UPDATE:", json.dumps(upd, ensure_ascii=False))
 
