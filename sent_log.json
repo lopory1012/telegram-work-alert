@@ -6,7 +6,7 @@
     "test_poll_temp": 11870
   },
   "2026-08-18": {},
-  "last_update_id": 247092885,
+  "last_update_id": 247092886,
   "polls": {
     "6068894720321389433": {
       "key": "mission_10",
@@ -22,7 +22,8 @@
       "key": "mission_20",
       "voters": {
         "948070176": "장혜림(수원)",
-        "517780129": "이송⚡️🦁"
+        "517780129": "이송⚡️🦁",
+        "132029936": "채은 김"
       }
     }
   },
@@ -44,6 +45,7 @@
     "mission_17": true,
     "mission_17_summary": true,
     "mission_20_poll_id": "6071146520135074575",
-    "mission_20": true
+    "mission_20": true,
+    "mission_20_summary": true
   }
 }
