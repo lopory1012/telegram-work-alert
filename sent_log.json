@@ -66,5 +66,7 @@
     "pray_reminder": true,
     "daily": true
   },
-  "2026-08-24": {}
+  "2026-08-24": {
+    "mon": true
+  }
 }
