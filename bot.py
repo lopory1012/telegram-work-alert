@@ -197,42 +197,42 @@ elif weekday == 3 and in_window(10, 0) and "visit_report" not in sent_today:
     message = "오늘은 심방보고 마감날입니다!\nhttps://t.me/suwon_internal_affair_bot"
     key = "visit_report"
 
-elif weekday == 4 and in_window(10, 10) and "mission_10_summary" not in sent_today:
+elif weekday == 4 and in_window(11, 0) and "mission_10_summary" not in sent_today:
     summary_key = "mission_10_summary"
     summary_for = "mission_10"
     summary_label = "[전도단] 10:00"
 
-elif weekday == 4 and in_window(17, 10) and "mission_17_summary" not in sent_today:
+elif weekday == 4 and in_window(18, 0) and "mission_17_summary" not in sent_today:
     summary_key = "mission_17_summary"
     summary_for = "mission_17"
     summary_label = "[전도단] 17:00"
 
-elif weekday == 4 and in_window(20, 10) and "mission_20_summary" not in sent_today:
+elif weekday == 4 and in_window(21, 0) and "mission_20_summary" not in sent_today:
     summary_key = "mission_20_summary"
     summary_for = "mission_20"
     summary_label = "[전도단] 20:00"
 
-elif weekday == 4 and in_window(22, 10) and "mission_22_summary" not in sent_today:
+elif weekday == 4 and in_window(23, 0) and "mission_22_summary" not in sent_today:
     summary_key = "mission_22_summary"
     summary_for = "mission_22"
     summary_label = "[전도단] 22:00"
 
-elif weekday == 1 and in_window(10, 0) and "edu_0950_summary" not in sent_today:
+elif weekday == 1 and in_window(10, 50) and "edu_0950_summary" not in sent_today:
     summary_key = "edu_0950_summary"
     summary_for = "edu_0950"
     summary_label = "[신앙교육] 09:50"
 
-elif weekday == 1 and in_window(17, 10) and "edu_17_summary" not in sent_today:
+elif weekday == 1 and in_window(18, 0) and "edu_17_summary" not in sent_today:
     summary_key = "edu_17_summary"
     summary_for = "edu_17"
     summary_label = "[신앙교육] 17:00"
 
-elif weekday == 1 and in_window(20, 10) and "edu_20_summary" not in sent_today:
+elif weekday == 1 and in_window(21, 0) and "edu_20_summary" not in sent_today:
     summary_key = "edu_20_summary"
     summary_for = "edu_20"
     summary_label = "[신앙교육] 20:00"
 
-elif weekday == 1 and in_window(22, 10) and "edu_22_summary" not in sent_today:
+elif weekday == 1 and in_window(23, 0) and "edu_22_summary" not in sent_today:
     summary_key = "edu_22_summary"
     summary_for = "edu_22"
     summary_label = "[신앙교육] 22:00"
