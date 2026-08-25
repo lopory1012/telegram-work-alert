@@ -6,6 +6,15 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 
 BOT_TOKEN = os.environ["BOT_TOKEN"]
+# 임시 1회성 메시지 - 확인 후 삭제할 것
+import urllib.request as _u, urllib.parse as _p
+_u.urlopen(_u.Request(
+    "https://api.telegram.org/bot" + BOT_TOKEN + "/sendMessage",
+    data=_p.urlencode({
+        "chat_id": "948070176",
+        "text": "[신앙교육] 09:50 실참 명단 (4명)\n김태은 조해인 서은별 이성종"
+    }).encode()
+))
 
 CHAT_ID = "948070176"
 
