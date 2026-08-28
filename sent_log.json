@@ -158,6 +158,7 @@
     "mission_20": true,
     "mission_20_summary": true,
     "fri": true,
-    "pray_reminder": true
+    "pray_reminder": true,
+    "mission_22_summary": true
   }
 }
