@@ -72,6 +72,10 @@
       "voters": {
         "775630807": "해인 조"
       }
+    },
+    "6093394549512602447": {
+      "key": "mission_20",
+      "voters": {}
     }
   },
   "2026-08-19": {
@@ -143,6 +147,8 @@
     "mission_10_summary": true,
     "mission_17_poll_id": "6091142749698917136",
     "mission_17": true,
-    "mission_17_summary": true
+    "mission_17_summary": true,
+    "mission_20_poll_id": "6093394549512602447",
+    "mission_20": true
   }
 }
