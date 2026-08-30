@@ -166,6 +166,7 @@
     "daily": true
   },
   "2026-08-30": {
-    "sun": true
+    "sun": true,
+    "pray_reminder": true
   }
 }
