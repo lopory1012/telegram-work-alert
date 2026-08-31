@@ -178,6 +178,7 @@
   },
   "2026-08-31": {
     "mon_edu_11_poll_id": "6100491480458069015",
-    "mon_edu_11": true
+    "mon_edu_11": true,
+    "mon_edu_11_summary": true
   }
 }
