@@ -93,6 +93,10 @@
     "6100491480458069037": {
       "key": "mon_edu_17",
       "voters": {}
+    },
+    "6100491480458069048": {
+      "key": "mon_edu_20",
+      "voters": {}
     }
   },
   "2026-08-19": {
@@ -187,6 +191,8 @@
     "mon_edu_11_summary": true,
     "mon_edu_17_poll_id": "6100491480458069037",
     "mon_edu_17": true,
-    "mon_edu_17_summary": true
+    "mon_edu_17_summary": true,
+    "mon_edu_20_poll_id": "6100491480458069048",
+    "mon_edu_20": true
   }
 }
