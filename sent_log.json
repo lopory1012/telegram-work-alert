@@ -97,6 +97,10 @@
     "6100491480458069048": {
       "key": "mon_edu_20",
       "voters": {}
+    },
+    "6102743280271753981": {
+      "key": "mon_edu_22",
+      "voters": {}
     }
   },
   "2026-08-19": {
@@ -196,6 +200,8 @@
     "mon_edu_20": true,
     "mon_edu_20_summary": true,
     "mon": true,
-    "pray_reminder": true
+    "pray_reminder": true,
+    "mon_edu_22_poll_id": "6102743280271753981",
+    "mon_edu_22": true
   }
 }
