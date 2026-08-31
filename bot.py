@@ -11,6 +11,7 @@ CHAT_ID = "948070176"
 
 MISSION_CHAT_ID = "-5109559157"
 EDU_CHAT_ID = "-5109559157"
+MON_EDU_CHAT_ID = "-5109559157"
 
 LOG_FILE = "sent_log.json"
 TOLERANCE = 3
@@ -193,6 +194,30 @@ elif weekday == 1 and in_window(22, 0) and "edu_22" not in sent_today:
     poll_question = "[신앙교육] 22:00 실참 체크"
     poll_key = "edu_22"
 
+elif weekday == 0 and in_window(11, 0) and "mon_edu_11" not in sent_today:
+    key = "mon_edu_11"
+    poll_room_chat_id = MON_EDU_CHAT_ID
+    poll_question = "[월요일교육] 11:00 실참 체크"
+    poll_key = "mon_edu_11"
+
+elif weekday == 0 and in_window(17, 0) and "mon_edu_17" not in sent_today:
+    key = "mon_edu_17"
+    poll_room_chat_id = MON_EDU_CHAT_ID
+    poll_question = "[월요일교육] 17:00 실참 체크"
+    poll_key = "mon_edu_17"
+
+elif weekday == 0 and in_window(20, 0) and "mon_edu_20" not in sent_today:
+    key = "mon_edu_20"
+    poll_room_chat_id = MON_EDU_CHAT_ID
+    poll_question = "[월요일교육] 20:00 실참 체크"
+    poll_key = "mon_edu_20"
+
+elif weekday == 0 and in_window(22, 0) and "mon_edu_22" not in sent_today:
+    key = "mon_edu_22"
+    poll_room_chat_id = MON_EDU_CHAT_ID
+    poll_question = "[월요일교육] 22:00(줌) 실참 체크"
+    poll_key = "mon_edu_22"
+
 elif weekday == 3 and in_window(10, 0) and "visit_report" not in sent_today:
     message = "오늘은 심방보고 마감날입니다!\nhttps://t.me/suwon_internal_affair_bot"
     key = "visit_report"
@@ -237,6 +262,26 @@ elif weekday == 1 and in_window(23, 0) and "edu_22_summary" not in sent_today:
     summary_for = "edu_22"
     summary_label = "[신앙교육] 22:00"
 
+elif weekday == 0 and in_window(12, 0) and "mon_edu_11_summary" not in sent_today:
+    summary_key = "mon_edu_11_summary"
+    summary_for = "mon_edu_11"
+    summary_label = "[월요일교육] 11:00"
+
+elif weekday == 0 and in_window(18, 0) and "mon_edu_17_summary" not in sent_today:
+    summary_key = "mon_edu_17_summary"
+    summary_for = "mon_edu_17"
+    summary_label = "[월요일교육] 17:00"
+
+elif weekday == 0 and in_window(21, 0) and "mon_edu_20_summary" not in sent_today:
+    summary_key = "mon_edu_20_summary"
+    summary_for = "mon_edu_20"
+    summary_label = "[월요일교육] 20:00"
+
+elif weekday == 0 and in_window(23, 0) and "mon_edu_22_summary" not in sent_today:
+    summary_key = "mon_edu_22_summary"
+    summary_for = "mon_edu_22"
+    summary_label = "[월요일교육] 22:00(줌)"
+
 
 did_something = False
 
@@ -260,7 +305,7 @@ if summary_key:
     if poll_id and poll_id in log["polls"]:
         names = list(log["polls"][poll_id].get("voters", {}).values())
     if names:
-        text = summary_label + " 실참 명단 (" + str(len(names)) + "명)\n" + "\n".join(names)
+        text = summary_label + " 실참 명단 (" + str(len(names)) + "명)\n" + " ".join(names)
     else:
         text = summary_label + " 실참 명단: 아직 없음"
     send_message(CHAT_ID, text)
