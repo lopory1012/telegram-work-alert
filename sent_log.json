@@ -207,6 +207,7 @@
     "mon": true,
     "pray_reminder": true,
     "mon_edu_22_poll_id": "6102743280271753981",
-    "mon_edu_22": true
+    "mon_edu_22": true,
+    "mon_edu_22_summary": true
   }
 }
