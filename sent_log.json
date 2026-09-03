@@ -257,6 +257,7 @@
     "daily": true
   },
   "2026-09-03": {
-    "visit_report": true
+    "visit_report": true,
+    "thu": true
   }
 }
