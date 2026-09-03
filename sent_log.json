@@ -258,6 +258,7 @@
   },
   "2026-09-03": {
     "visit_report": true,
-    "thu": true
+    "thu": true,
+    "pray_reminder": true
   }
 }
