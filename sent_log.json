@@ -256,5 +256,7 @@
     "pray_reminder": true,
     "daily": true
   },
-  "2026-09-03": {}
+  "2026-09-03": {
+    "visit_report": true
+  }
 }
