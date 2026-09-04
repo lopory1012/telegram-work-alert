@@ -140,6 +140,10 @@
     "6111414694688326368": {
       "key": "mission_17",
       "voters": {}
+    },
+    "6111414694688326381": {
+      "key": "mission_20",
+      "voters": {}
     }
   },
   "2026-08-19": {
@@ -276,6 +280,8 @@
     "mission_10_summary": true,
     "mission_17_poll_id": "6111414694688326368",
     "mission_17": true,
-    "mission_17_summary": true
+    "mission_17_summary": true,
+    "mission_20_poll_id": "6111414694688326381",
+    "mission_20": true
   }
 }
