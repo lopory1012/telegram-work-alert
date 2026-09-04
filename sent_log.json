@@ -268,6 +268,7 @@
   },
   "2026-09-04": {
     "mission_10_poll_id": "6111414694688326345",
-    "mission_10": true
+    "mission_10": true,
+    "mission_10_summary": true
   }
 }
