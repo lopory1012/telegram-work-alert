@@ -312,6 +312,7 @@
     "mon_edu_11_summary": true,
     "mon_edu_17_summary": true,
     "mon_edu_20_summary": true,
-    "mon": true
+    "mon": true,
+    "pray_reminder": true
   }
 }
