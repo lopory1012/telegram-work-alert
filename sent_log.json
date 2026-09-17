@@ -374,6 +374,7 @@
   "2026-09-17": {
     "visit_report": true,
     "thu": true,
-    "pray_reminder": true
+    "pray_reminder": true,
+    "daily": true
   }
 }
