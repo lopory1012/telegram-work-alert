@@ -404,6 +404,7 @@
     "daily": true
   },
   "2026-09-22": {
-    "edu_0950_summary": true
+    "edu_0950_summary": true,
+    "edu_17_summary": true
   }
 }
