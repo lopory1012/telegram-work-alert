@@ -453,5 +453,7 @@
     "edu_22_summary": true,
     "daily": true
   },
-  "2026-09-30": {}
+  "2026-09-30": {
+    "pray_reminder": true
+  }
 }
