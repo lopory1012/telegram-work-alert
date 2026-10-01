@@ -459,6 +459,7 @@
   },
   "2026-10-01": {
     "visit_report": true,
-    "thu": true
+    "thu": true,
+    "pray_reminder": true
   }
 }
