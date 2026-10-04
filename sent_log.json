@@ -476,6 +476,7 @@
     "daily": true
   },
   "2026-10-04": {
-    "sun": true
+    "sun": true,
+    "pray_reminder": true
   }
 }
