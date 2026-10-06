@@ -489,5 +489,7 @@
     "mon_edu_22_summary": true,
     "daily": true
   },
-  "2026-10-06": {}
+  "2026-10-06": {
+    "edu_0950_summary": true
+  }
 }
