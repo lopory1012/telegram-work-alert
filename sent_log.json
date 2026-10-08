@@ -500,5 +500,7 @@
     "pray_reminder": true,
     "daily": true
   },
-  "2026-10-08": {}
+  "2026-10-08": {
+    "visit_report": true
+  }
 }
