@@ -526,6 +526,7 @@
   "2026-10-12": {
     "mon_edu_11_summary": true,
     "mon_edu_17_summary": true,
-    "mon_edu_20_summary": true
+    "mon_edu_20_summary": true,
+    "mon": true
   }
 }
