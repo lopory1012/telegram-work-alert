@@ -533,6 +533,7 @@
     "daily": true
   },
   "2026-10-13": {
-    "edu_0950_summary": true
+    "edu_0950_summary": true,
+    "edu_17_summary": true
   }
 }
