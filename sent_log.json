@@ -544,6 +544,7 @@
     "daily": true
   },
   "2026-10-15": {
-    "visit_report": true
+    "visit_report": true,
+    "thu": true
   }
 }
