@@ -549,5 +549,7 @@
     "pray_reminder": true,
     "daily": true
   },
-  "2026-10-16": {}
+  "2026-10-16": {
+    "mission_10_summary": true
+  }
 }
