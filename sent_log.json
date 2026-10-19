@@ -567,6 +567,7 @@
     "daily": true
   },
   "2026-10-19": {
-    "mon_edu_11_summary": true
+    "mon_edu_11_summary": true,
+    "mon_edu_17_summary": true
   }
 }
