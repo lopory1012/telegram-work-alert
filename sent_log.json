@@ -609,5 +609,7 @@
     "pray_reminder": true,
     "daily": true
   },
-  "2026-10-26": {}
+  "2026-10-26": {
+    "mon_edu_11_summary": true
+  }
 }
