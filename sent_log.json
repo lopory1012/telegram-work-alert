@@ -668,5 +668,7 @@
     "edu_22_summary": true,
     "daily": true
   },
-  "2026-11-04": {}
+  "2026-11-04": {
+    "pray_reminder": true
+  }
 }
