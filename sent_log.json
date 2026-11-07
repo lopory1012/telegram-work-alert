@@ -687,5 +687,7 @@
     "mission_22_summary": true,
     "daily": true
   },
-  "2026-11-07": {}
+  "2026-11-07": {
+    "daily": true
+  }
 }
