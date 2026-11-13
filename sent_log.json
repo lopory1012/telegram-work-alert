@@ -721,6 +721,7 @@
     "daily": true
   },
   "2026-11-13": {
-    "mission_10_summary": true
+    "mission_10_summary": true,
+    "mission_17_summary": true
   }
 }
