@@ -734,6 +734,7 @@
   },
   "2026-11-15": {
     "sun": true,
-    "pray_reminder": true
+    "pray_reminder": true,
+    "daily": true
   }
 }
