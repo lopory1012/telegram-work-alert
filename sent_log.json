@@ -799,5 +799,7 @@
     "pray_reminder": true,
     "daily": true
   },
-  "2026-11-26": {}
+  "2026-11-26": {
+    "visit_report": true
+  }
 }
